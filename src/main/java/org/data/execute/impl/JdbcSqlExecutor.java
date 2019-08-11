@@ -7,6 +7,7 @@ import org.data.model.DataTransConfig;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcSqlExecutor extends AbstractSqlExecutor {
@@ -22,20 +23,27 @@ public class JdbcSqlExecutor extends AbstractSqlExecutor {
 
     @Override
     public List<List<String>> getData() {
+        List<List<String>> result = new ArrayList<>();
         try {
             Statement statement = getConnection().createStatement();
             ResultSet resultSet = statement.executeQuery(dataTransConfig.getDataSqlContent());
             ResultSetMetaData metaData = resultSet.getMetaData();
+
+            int colunmCount = metaData.getColumnCount();
             while (resultSet.next()){
                 // TODO
-//                ResultSetMetaData metaData = resultSet.getMetaData();
+                List<String> rowData = new ArrayList<>();
+                for (int i=1;i<=colunmCount;i++){
+                    rowData.add((String)resultSet.getObject(i));
+                    result.add(rowData);
+                }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return result;
     }
 
     @Override
