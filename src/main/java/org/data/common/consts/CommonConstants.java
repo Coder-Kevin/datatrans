@@ -1,4 +1,4 @@
-package org.data.consts;
+package org.data.common.consts;
 
 public interface CommonConstants {
 	
@@ -11,5 +11,10 @@ public interface CommonConstants {
 	String PASSWORD = "D80ZcSetOETH";
 	
 	String DRIVER_MYSQL = "com.mysql.jdbc.Driver";
+
+	int SUCCESS_CODE = 200;
+
+	int FAIL_CODE = 100;
+
 
 }

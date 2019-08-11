@@ -1,18 +1,18 @@
 package org.data.execute;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.data.consts.CommonConstants;
-import org.data.util.FileUtils;
-import org.data.util.StringUtil;
+import org.data.common.consts.CommonConstants;
+import org.data.common.util.ConnectionUtil;
+import org.data.common.util.FileUtils;
+import org.data.common.util.StringUtil;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public abstract class AbstractSqlExecutor {
+public abstract class AbstractSqlExecutor implements SqlExecutor{
 
     public abstract List<List<String>> getData();
 
@@ -21,6 +21,11 @@ public abstract class AbstractSqlExecutor {
     public abstract int[] indexArrays();
 
     public abstract Class[] paramsTypeArrays();
+
+    @Override
+    public Connection getConnection() {
+        return ConnectionUtil.getConnection(CommonConstants.URL);
+    }
 
     public void execute(boolean isWriteFile){
 
@@ -44,12 +49,9 @@ public abstract class AbstractSqlExecutor {
         Connection conn = null;
         Statement state = null;
         try {
-            Class.forName(CommonConstants.DRIVER_MYSQL);
-            conn = DriverManager.getConnection(CommonConstants.URL, CommonConstants.USER_NAME, CommonConstants.PASSWORD);
+            conn = getConnection();
             state = conn.createStatement();
             conn.setAutoCommit(false);
-
-
 
             StringBuilder countryBuilder = new StringBuilder();
             for(List<String> data : list) {
@@ -73,8 +75,6 @@ public abstract class AbstractSqlExecutor {
 
             state.executeBatch();
             conn.commit();
-        } catch (ClassNotFoundException e1) {
-            e1.printStackTrace();
         } catch (SQLException e1) {
             e1.printStackTrace();
             try {
@@ -86,20 +86,7 @@ public abstract class AbstractSqlExecutor {
         } catch (IOException e1) {
             e1.printStackTrace();
         } finally {
-            try {
-                if(state != null) {
-                    state.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            try {
-                if(conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            ConnectionUtil.closeResource(conn,state,null);
         }
     }
 }

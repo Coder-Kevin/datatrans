@@ -1,4 +1,4 @@
-package org.data.util;
+package org.data.common.util;
 
 import java.io.File;
 import java.io.FileOutputStream;

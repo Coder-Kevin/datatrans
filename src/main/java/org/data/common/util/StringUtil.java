@@ -1,4 +1,4 @@
-package org.data.util;
+package org.data.common.util;
 
 public final class StringUtil {
 

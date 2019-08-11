@@ -1,7 +1,7 @@
-package org.data.dict;
+package demo.dict;
 
+import org.data.common.util.POIExcelUtil;
 import org.data.execute.AbstractSqlExecutor;
-import org.data.util.POIExcelUtil;
 import java.util.List;
 
 public class DictTestMain extends AbstractSqlExecutor {

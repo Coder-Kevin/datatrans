@@ -1,6 +1,7 @@
-package org.data.util;
+package org.data.common.util;
 
-import org.data.consts.CommonConstants;
+import org.data.common.consts.CommonConstants;
+import org.data.model.DataSourceConfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,6 +26,19 @@ public final class ConnectionUtil {
 			e.printStackTrace();
 		}
 		
+		return null;
+	}
+
+	public static Connection getConnection(DataSourceConfig dataSourceConfig) {
+		try {
+			Class.forName(dataSourceConfig.getDriverClassName());
+			return DriverManager.getConnection(dataSourceConfig.getUrl(), dataSourceConfig.getUserName(), dataSourceConfig.getPassword());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 	
